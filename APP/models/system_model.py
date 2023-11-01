@@ -1,6 +1,6 @@
 from APP import getCursor
 from datetime import datetime
-import json
+import json,random,string
 
 class Booking:
     def __init__(self, bookingID: int, userID: int, numberOfSeat: int, bookingDate: datetime, screeningID: int, seatList: list, amount: float, paymentID: int, status:str):
@@ -194,9 +194,9 @@ class Booking:
 
   
 class Coupon:
-    def __init__(self, couponID: int,expireDate:datetime, discount: float, couponCode:str):
+    def __init__(self, couponID: int,expiryDate:datetime, discount: float, couponCode:str):
         self.__couponID = couponID
-        self.__expireDate = expireDate
+        self.__expiryDate = expiryDate
         self.__discount = discount
         self.__couponCode = couponCode
 
@@ -209,12 +209,12 @@ class Coupon:
         self.__couponID = couponID
 
     @property
-    def expireDate(self):
-        return self.__expireDate
+    def expiryDate(self):
+        return self.__expiryDate
 
-    @expireDate.setter
-    def expireDate(self, expireDate):
-        self.__expireDate = expireDate
+    @expiryDate.setter
+    def expiryDate(self, expiryDate):
+        self.__expiryDate = expiryDate
 
     @property
     def discount(self):
@@ -232,27 +232,65 @@ class Coupon:
     def couponCode(self, couponCode):
         self.__couponCode = couponCode
 
+    @staticmethod
+    def get_coupon_list():
+        connection = getCursor()
+        connection.execute("""SELECT * FROM coupon""")
+        rows = connection.fetchall()
+
+        coupon_list = []
+
+        for row in rows:
+            couponID = row[0]
+            expiryDate = row[1]
+            discount = row[2]
+            couponCode = row[3]
+
+            # Create a Coupon object and append it to the list
+            coupon = Coupon(
+                couponID = couponID,
+                expiryDate =  expiryDate,
+                discount = discount,
+                couponCode = couponCode
+                )
+            coupon_list.append(coupon)
+            print("coupon_list",coupon_list)
+        return coupon_list
+
     @classmethod
     def add_coupon(cls, coupon):
         try:
-            connection = getCursor()  
+            connection = getCursor()
+            # Generate a unique 4-character coupon code
+            while True:
+                coupon_code = ''.join(random.choice(string.ascii_letters + string.digits) for _ in range(4))
+                print("first coupon_code:",coupon_code)
+                check_query = "SELECT * FROM coupon WHERE couponCode = %s"
+                connection.execute(check_query, (coupon_code,))
+                result=connection.fetchone()
+                if not result:
+                    break
+            print("coupon_code create:",coupon_code)
             insert_query = """
                 INSERT INTO coupon (expiryDate, discount, couponCode)
                 VALUES (%s, %s, %s)
             """
-            connection.execute(insert_query, (coupon.expireDate, coupon.discount, coupon.couponCode))
-            return True
+            print("Inserting new coupon:", coupon)
+            values = (coupon.expiryDate, coupon.discount, coupon_code)
+            connection.execute(insert_query, values)
+            coupon_id = connection.lastrowid
+            if coupon_id: 
+                print("insert new coupon succeed")
+                print("Inserted coupon ID:", coupon_id)
+                return coupon_id
         except Exception as e:
-            return False
+            return None
         
     def get_id_by_code(code):
         connection = getCursor()
-        print ("code provide:",code)
         query = """SELECT couponID FROM coupon WHERE couponCode = %s"""
-        print("query:",query)
         connection.execute(query, (code,))
         result = connection.fetchone()
-        print("select result:", result)
         if result:
             coupon_id=result[0]
             print("coupon_id",coupon_id)

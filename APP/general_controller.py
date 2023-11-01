@@ -282,17 +282,29 @@ class BookingSystem:
                 return None
     
     @staticmethod
-    def add_coupon_return_coupon(expireDate,discount,couponCode):
-        result = Coupon.get_id_by_code(couponCode)
-        if result:
-            flash('coupon code exists, please try anouther')
-        else:
-            new_coupon = Coupon(couponID=None, expireDate=expireDate, discount=discount, couponCode=couponCode)
-            success = Coupon.add_coupon(new_coupon)
-            if success:
-                return new_coupon
+    def display_coupon_list():
+        coupon_list = Coupon.get_coupon_list()
+        return coupon_list
+    
+    @staticmethod
+    def add_coupon(expiryDate,discount):
+        print("add coupon method is attributed")
+        current_date=datetime.now()
+        expiry_date = datetime.strptime(expiryDate, '%Y-%m-%d')
+        print("current_date:",current_date)
+        if expiry_date > current_date:
+            print("expiryDate is valid")
+            new_coupon = Coupon(couponID=None, expiryDate=expiry_date, discount=discount, couponCode=None)
+            print("new_coupon:",new_coupon)
+            coupon_id = Coupon.add_coupon(new_coupon)
+            print("coupon_id in controller:",coupon_id)
+            if coupon_id:
+                return coupon_id
             else:
                 return None
+        else:
+            flash("expiryDate can not be early than the current date.")
+            return None
 
     @staticmethod
     def add_booking(user_id, screening_id, selected_seats):
