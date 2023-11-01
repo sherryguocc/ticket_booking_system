@@ -14,7 +14,7 @@ import json
 from .models.user_model import User
 from .models.movie_model import Movie, Screening
 from .models.cinema_model import Hall, ScreeningSeat
-from .models.system_model import Booking, Payment,CreditCard,DebitCard,Coupon
+from .models.system_model import Booking, Payment,CreditCard,DebitCard,Coupon,Notification
 
 class BookingSystem:
     def show_home():
@@ -250,6 +250,7 @@ class BookingSystem:
 
     @staticmethod
     def add_payment_return_id(booking_id, date, couponCode, creditCardID, debitCardID):
+        user_id = current_user.get_id()
         booking = Booking.find_booking_by_id(booking_id)
         amount = booking.amount
         print("booking amount:",booking.amount)
@@ -263,6 +264,7 @@ class BookingSystem:
                 new_payment_id = Payment.add_payment(new_payment)
 
                 if new_payment_id:
+                    Notification.send_payment_notes(user_id)
                     return new_payment_id
                 else:
                     return None
@@ -270,6 +272,7 @@ class BookingSystem:
                 new_payment_id = Payment.add_payment(new_payment)
                 flash("coupon code is expired.Paid without discount.")
                 if new_payment_id:
+                    Notification.send_payment_notes(user_id)
                     return new_payment_id
                 else:
                     return None
@@ -277,6 +280,7 @@ class BookingSystem:
         else:
             new_payment_id = Payment.add_payment(new_payment)
             if new_payment_id:
+                Notification.send_payment_notes(user_id)
                 return new_payment_id
             else:
                 return None
@@ -327,6 +331,7 @@ class BookingSystem:
         if success:
             for seat in selected_seats:
                 ScreeningSeat.reserve_seat(screening_id,seat)
+            Notification.send_booking_notes(user_id)
             return new_booking
         else:
             return None
@@ -378,6 +383,7 @@ class BookingSystem:
 
     @staticmethod
     def cancel_booking(booking_id):
+        user_id = current_user.get_id()
         booking = Booking.find_booking_by_id(booking_id)
 
         for seat in booking.seatList:
@@ -386,6 +392,7 @@ class BookingSystem:
             return flash("Booking not found. Cannot cancel.")
         if booking.paymentID:# if this booking is paid, need to refund payment first
             result = Payment.cancel_and_refund(booking.paymentID)
+            Notification.send_cancel_notes_with_pay(user_id)
             if result:
                 Booking.cancel_booking(booking_id)
                 flash("Booking cancelled and payment refund successfully.")
@@ -394,6 +401,7 @@ class BookingSystem:
         else:
             Booking.cancel_booking(booking_id)
             ScreeningSeat.cancel_seat(booking.screeningID,seat)
+            Notification.send_cancel_notes_without_pay(user_id)
             flash("Booking cancelled successfully.")
 
     @staticmethod
@@ -418,6 +426,8 @@ class BookingSystem:
         if booking_id_list:# if there are bookings under this screening
             for booking_id in booking_id_list:
                 BookingSystem.cancel_booking(booking_id)
+                for user_id in Booking.find_user_ids_by_booking_id(booking_id):
+                    Notification.screening_cancel_notes(user_id)
 
         success = Screening.cancel_screening(screening_id)
 
@@ -428,6 +438,15 @@ class BookingSystem:
         else:
             flash("Failed to cancel the screening.")
             
+    @staticmethod
+    def send_movie_cancel_notes(movie_id):
+        screening_list=Screening.get_screening_list(movie_id)
+        for screening in screening_list:
+            booking_ids = Booking.find_booking_ids_by_screening_id(screening.screeningID)
+            for booking_id in booking_ids:
+                user_id = Booking.find_user_ids_by_booking_id(booking_id)
+                Notification.movie_cancel_notes(user_id)
+
     
     @staticmethod
     def cancel_movie(movie_id):
@@ -437,8 +456,15 @@ class BookingSystem:
                 BookingSystem.cancel_screening(screening.screeningID)
 
         Movie.cancel_movie(movie_id)
+        BookingSystem.send_movie_cancel_notes(movie_id)
         flash("Movie and associated screenings cancelled successfully!")
 
         return True
+    
+    @staticmethod
+    def get_notifications(user_id):
+        notes_list = Notification.get_notification_list(user_id)
+        return notes_list
+    
 
 

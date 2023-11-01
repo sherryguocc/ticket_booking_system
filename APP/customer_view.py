@@ -126,7 +126,7 @@ def cancel_booking(booking_id):
     BookingSystem.cancel_booking(booking_id)
     return redirect(url_for('customer.booking_list', user_id=user_id))
 
-@customer.route('/pay/<int:booking_id>/<payment_method>')
+@customer.route('/customer/pay/<int:booking_id>/<payment_method>')
 def pay(booking_id, payment_method):
     user_id = current_user.get_id()
     if payment_method == 'credit_card':
@@ -135,3 +135,9 @@ def pay(booking_id, payment_method):
         return render_template('customer/debitcard.html', booking_id=booking_id, user_id=user_id)
     elif payment_method == 'cash':
         return render_template('customer/cash.html',user_id=user_id)
+    
+
+@customer.route('/customer/notifications/<int:user_id>/')
+def get_notifications(user_id):
+    notification_list = BookingSystem.get_notifications(user_id)
+    return render_template('customer/notifications.html', notification_list=notification_list)

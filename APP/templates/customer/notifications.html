@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+    <h1>Notifications</h1>
+    {% if notification_list %}
+    <table class="table">
+        <thead>
+            <tr>
+                <th style="width: 20%;">Notification Date</th>
+                <th style="width: 80%;">Content</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for notification in notification_list %}
+                <tr>
+                    <td>{{ notification.date }}</td>
+                    <td>{{ notification.content }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <h5>Not any notifications yet</h5>
+    {% endif %}
+</div>
+{% endblock %}

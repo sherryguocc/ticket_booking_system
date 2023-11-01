@@ -191,6 +191,22 @@ class Booking:
         connection.execute(query, (screening_id,))
         booking_ids = {row[0] for row in connection.fetchall()}
         return booking_ids
+    
+    @staticmethod
+    def find_booking_ids_by_movie_id(screening_id):
+        connection = getCursor()
+        query = "SELECT bookingID FROM booking WHERE screeningID = %s;"
+        connection.execute(query, (screening_id,))
+        booking_ids = {row[0] for row in connection.fetchall()}
+        return booking_ids
+    
+    @staticmethod
+    def find_user_ids_by_booking_id(booking_id):
+        connection = getCursor()
+        query = "SELECT userID FROM booking WHERE screeningID = %s;"
+        connection.execute(query, (booking_id,))
+        user_ids = {row[0] for row in connection.fetchall()}
+        return user_ids
 
   
 class Coupon:
@@ -560,3 +576,166 @@ class DebitCard():
             return debittcard_id
         else: 
             print("No creditcard_id found")
+
+class Notification():
+    def __init__(self, notificationID, date, content, userID):
+        self.__notificationID = notificationID
+        self.__date = date
+        self.__content = content
+        self.__userID = userID
+    
+    @property
+    def debitcardID(self):
+        return self.__notificationID
+
+    @property
+    def date(self):
+        return self.__date
+
+    @date.setter
+    def date(self, date):
+        self.__date = date
+
+    @property
+    def content(self):
+        return self.__content
+
+    @content.setter
+    def content(self, content):
+        self.__content = content
+
+    @property
+    def userID(self):
+        return self.__userID
+
+    @userID.setter
+    def userID(self, userID):
+        self.__userID = userID
+
+    @staticmethod
+    def get_notification_list(user_id):
+        connection = getCursor()
+        query="""SELECT * FROM notification WHERE userID = %s"""
+        connection.execute(query, (user_id,))
+        rows = connection.fetchall()
+
+        notification_list = []
+
+        for row in rows:
+            notificationID = row[0]
+            date = row[1]
+            content = row[2]
+            userID = row[3]
+
+            # Create a notification object and append it to the list
+            notification = Notification(
+                notificationID = notificationID,
+                date =  date,
+                content = content,
+                userID = userID
+                )
+            notification_list.append(notification)
+            print("notification_list",notification_list)
+        return notification_list
+    
+    @staticmethod
+    def send_booking_notes(user_id):
+        content = "You have successfully booked a screening. Please view your booking list to pay."
+        date=datetime.now()
+        connection=getCursor()
+        insert_query = """
+                INSERT INTO notification (date, content, userID)
+                VALUES (%s, %s, %s)
+            """
+        values = (date, content, user_id)
+        connection.execute(insert_query, values)
+        note_id = connection.lastrowid
+        if note_id:
+            return note_id
+        else:
+            return None
+    
+    @staticmethod
+    def send_payment_notes(user_id):
+        content = "You have successfully made a payment. Please view your booking list to check."
+        date = datetime.now()
+        connection = getCursor()
+        insert_query = """
+                INSERT INTO notification (date, content, userID)
+                VALUES (%s, %s, %s)
+            """
+        values = (date, content, user_id)
+        connection.execute(insert_query, values)
+        note_id = connection.lastrowid
+        if note_id:
+            return note_id
+        else:
+            return None
+        
+    @staticmethod
+    def send_cancel_notes_without_pay(user_id):
+        content = "Your booking has been cancelled. Please view your booking list to check."
+        date = datetime.now()
+        connection = getCursor()
+        insert_query = """
+                INSERT INTO notification (date, content, userID)
+                VALUES (%s, %s, %s)
+            """
+        values = (date, content, user_id)
+        connection.execute(insert_query, values)
+        note_id = connection.lastrowid
+        if note_id:
+            return note_id
+        else:
+            return None
+        
+    @staticmethod
+    def send_cancel_notes_with_pay(user_id):
+        content = "Your booking has been cancelled. We will refund the payment amount to your account."
+        date = datetime.now()
+        connection = getCursor()
+        insert_query = """
+                INSERT INTO notification (date, content, userID)
+                VALUES (%s, %s, %s)
+            """
+        values = (date, content, user_id)
+        connection.execute(insert_query, values)
+        note_id = connection.lastrowid
+        if note_id:
+            return note_id
+        else:
+            return None
+        
+    @staticmethod
+    def screening_cancel_notes(user_id):
+        content = "Sorry to inform you that, the screening you booked has been cancelled.If you have paid, we will make refund to your account. "
+        date = datetime.now()
+        connection = getCursor()
+        insert_query = """
+                INSERT INTO notification (date, content, userID)
+                VALUES (%s, %s, %s)
+            """
+        values = (date, content, user_id)
+        connection.execute(insert_query, values)
+        note_id = connection.lastrowid
+        if note_id:
+            return note_id
+        else:
+            return None
+        
+    @staticmethod
+    def movie_cancel_notes(user_id):
+        content = "Sorry to inform you that, the movie you booked has been cancelled. If you have paid, we will make refund to your account."
+        date = datetime.now()
+        connection = getCursor()
+        insert_query = """
+                INSERT INTO notification (date, content, userID)
+                VALUES (%s, %s, %s)
+            """
+        values = (date, content, user_id)
+        connection.execute(insert_query, values)
+        note_id = connection.lastrowid
+        if note_id:
+            return note_id
+        else:
+            return None

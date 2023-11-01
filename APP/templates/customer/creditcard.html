@@ -44,4 +44,23 @@
         <button type="submit" class="btn btn-dark">Submit</button>
     </form>
 </div>
+<script>
+    const expiryMonth = document.getElementById('expiryMonth');
+    const expiryYear = document.getElementById('expiryYear');
+
+    // 获取当前日期
+    const currentDate = new Date();
+
+    // 设置最小日期为当前日期
+    expiryYear.addEventListener('change', function () {
+        const selectedYear = parseInt(expiryYear.value, 10);
+        const selectedMonth = parseInt(expiryMonth.value, 10) - 1; // 月份从0开始
+        const selectedDate = new Date(selectedYear, selectedMonth);
+
+        if (selectedDate < currentDate) {
+            alert('Expiry date cannot be earlier than the current date.');
+            // 或者可以添加其他处理逻辑，例如禁用提交按钮
+        }
+    });
+</script>
 {% endblock %}

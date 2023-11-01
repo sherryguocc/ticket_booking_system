@@ -75,7 +75,7 @@
                                     <a class="btn btn-light" href="{{ url_for('customer.booking_list',user_id=current_user.userID) }}">View My Bookings</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="btn btn-light" href="#">Notifications</a>
+                                    <a class="btn btn-light" href="{{ url_for('customer.get_notifications',user_id=current_user.userID) }}">Notifications</a>
                                 </li>
                             {% elif current_user.role == 'staff' %}
                                 <li class="nav-item">
