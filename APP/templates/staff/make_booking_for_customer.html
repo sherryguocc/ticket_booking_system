@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container">
+    <h2>Movie Ticket Booking</h2>
+    <h5>Dear Staff, you will make this booking under your user ID</h5>
+    <a class="btn btn-secondary" href="{{ url_for('home.screening_list', movie_id=screening.movieID) }}">Back to screeninglist</a>
+    <h4 style="text-align: center;">Selected Screening: {{ movie_name }} {{ screening.date }} {{ screening.startTime }}-{{ screening.endTime }}</h4>
+    <form method="post" action="{{ url_for('staff.confirm_booking', screening_id=screening_id) }}">
+        <p style="text-align: center;">■ Booked Seats&nbsp;&nbsp;&nbsp;&nbsp;● Reserved Seats&nbsp;&nbsp;&nbsp;&nbsp;□ Available Seats</p>
+        <p style="text-align: center;">ticket price:${{screening.price}}/pp</p>
+        <p style="text-align: center;">----------------Screen----------------</p>
+        <div style="text-align: center;">
+            <table>
+                <tr>
+                    <td></td>
+                    {% for col in range(columns) %}
+                        <td><div class="table-header">Column{{ col + 1 }}&nbsp;&nbsp;</div></td>
+                    {% endfor %}
+                </tr>
+                {% for row in range(rows) %}
+                    <tr>
+                        <td><div class="table-header">Row{{ row + 1 }}&nbsp;&nbsp;&nbsp;&nbsp;</div></td>
+                        {% for col in range(columns) %}
+                            <td>
+                                {% set seat_number = (row + 1) ~ '-' ~ (col + 1) %}
+                                {% set seat_id = 'seat' ~ seat_number %}
+                                {% if seat_id in booked_seats %}
+                                    <div>■</div>
+                                {% elif seat_id in reserved_seats %}
+                                    <div>●</div>
+                                {% else %}
+                                    <div>
+                                        <input type="checkbox" name="selected_seats" value="seat{{ seat_number }}">
+                                    </div>
+                                {% endif %}
+                            </td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            </table>
+            <div style="text-align: right; margin-top: 10px;">
+                <button type="submit" class="btn btn-dark">Confirm booking</button>
+            </div>
+        </div>
+        <input type="hidden" name="selected_seats" value="">
+    </form>
+</div>
+{% endblock %}

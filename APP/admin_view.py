@@ -6,7 +6,7 @@ from flask_login import (UserMixin, LoginManager, login_user, login_required, lo
 # Create a Blueprint for the admin routes
 admin = Blueprint('admin', __name__)
 
-@admin.route('/add_screening', methods=['GET','POST'])
+@admin.route('/admin/add_screening', methods=['GET','POST'])
 @login_required
 def add_screening():
     movieList = BookingSystem.get_movie_list()
@@ -16,7 +16,7 @@ def add_screening():
         return render_template ('admin/add_screening.html', movies=movies, search_content=search_content)
     return render_template('admin/add_screening.html',movieList=movieList)
 
-@admin.route('/add_screening_by_id/<int:movie_id>', methods=['GET', 'POST'])
+@admin.route('/admin/add_screening_by_id/<int:movie_id>', methods=['GET', 'POST'])
 @login_required
 def add_screening_by_id(movie_id):
     if request.method == 'POST':
@@ -55,7 +55,7 @@ def add_movie():
 
     return render_template('admin/add_movie.html')
 
-@admin.route('/cancel_screening', methods=['GET','POST'])
+@admin.route('/admin/cancel_screening', methods=['GET','POST'])
 @login_required
 def cancel_screening():
     movieList = BookingSystem.get_movie_list()
@@ -65,13 +65,13 @@ def cancel_screening():
         return render_template ('admin/add_screening.html', movies=movies, search_content=search_content)
     return render_template('admin/cancel_screening.html',movieList=movieList)
 
-@admin.route('/cancel_screening_by_id/<int:screening_id>/<int:movie_id>')
+@admin.route('/admin/cancel_screening_by_id/<int:screening_id>/<int:movie_id>')
 @login_required
 def cancel_screening_by_id(screening_id,movie_id):
     BookingSystem.cancel_screening(screening_id)
     return redirect(url_for('home.screening_list', movie_id=movie_id))
 
-@admin.route('/cancel_movie')
+@admin.route('/admin/cancel_movie')
 @login_required
 def cancel_movie():
     movieList = BookingSystem.get_movie_list()
@@ -81,7 +81,7 @@ def cancel_movie():
         return render_template ('admin/cancel_movie.html', movies=movies, search_content=search_content)
     return render_template('admin/cancel_movie.html',movieList=movieList)
 
-@admin.route('/cancel_movie_by_id/<int:movie_id>')
+@admin.route('/admin/cancel_movie_by_id/<int:movie_id>')
 @login_required
 def cancel_movie_by_id(movie_id):
     BookingSystem.cancel_movie(movie_id)

@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container">
+    <a class="btn btn-secondary" href="{{ url_for('home.home') }}">Back to home page</a>
+    <a class="btn btn-secondary" href="{{ url_for('staff.booking_list',user_id=user_id) }}">Back to booking list</a>
+    <h2>Enter Coupon code</h2>
+    <form method="POST" action="{{ url_for('staff.pay_by_cash', booking_id=booking_id) }}">
+        <div class="form-group">
+            <label for="coupon">Coupon:</label>
+            <input type="text" class="form-control" id="coupon" name="coupon" placeholder="Enter your coupon code">
+        </div>
+        <button type="submit" class="btn btn-primary">Staff confirm received the cash</button>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container">
+    <h2>Enter Coupon and Credit Card Information</h2>
+    <a class="btn btn-secondary" href="{{ url_for('staff.booking_list',user_id=user_id) }}">Back to booking list</a>
+    <form method="POST" action="{{ url_for('staff.pay_by_creditcard', booking_id=booking_id) }}">
+        <div class="form-group">
+            <label for="coupon">Coupon:</label>
+            <input type="text" class="form-control" id="coupon" name="coupon" placeholder="Enter your coupon code">
+        </div>
+        <div class="form-group">
+            <label for="cardNumber">Card Number:</label>
+            <input type="text" class="form-control" id="cardNumber" name="cardNumber" placeholder="xxxx-xxxx-xxxx-xxxx" maxlength="12" required>
+        </div>
+        <div class="form-group">
+            <label for="cardType">Card Type:</label>
+            <select class="form-control" id="cardType" name="cardType">
+                <option value="Visa">Visa</option>
+                <option value="Master">Master</option>
+                <option value="UnionPay">UnionPay</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="expiryDate">Expiry Date:</label>
+            <select class="form-control" id="expiryMonth" name="expiryMonth">
+                {% for month in range(1, 13) %}
+                    <option value="{{ '%02d'|format(month) }}">{{ '%02d'|format(month) }}</option>
+                {% endfor %}
+            </select>
+            <select class="form-control" id="expiryYear" name="expiryYear">
+                {% for year in range(2023, 2034) %}
+                    <option value="{{ year }}">{{ year }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="nameOnCard">Name on Card:</label>
+            <input type="text" class="form-control" id="nameOnCard" name="nameOnCard" required>
+        </div>
+        <div class="form-group">
+            <label for="securityNumber">Security Number:</label>
+            <input type="text" class="form-control" id="securityNumber" name="securityNumber" placeholder="xxx" maxlength="3" required>
+        </div>
+        <button type="submit" class="btn btn-dark">Submit</button>
+    </form>
+</div>
+{% endblock %}

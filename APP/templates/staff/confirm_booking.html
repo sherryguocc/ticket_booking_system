@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h2>Booking Information</h2>
+    <a class="btn btn-secondary" href="{{ url_for('staff.make_booking_for_a_staff',screening_id=selected_screening.screeningID) }}">Back</a>
+
+    {% if selected_seats %}
+    <h4>Selected Screening: {{ movie_name }} {{ selected_screening.date }} {{ selected_screening.startTime }}-{{ selected_screening.endTime }}</h4>
+    <h4>Selected Seats:</h4>
+    <ul>
+        {% for seat in selected_seats %}
+            <li>{{ seat }}</li>
+        {% endfor %}
+    </ul>
+    <h4>Total tickes: </h4><p>{{ seats_count }}</p>
+    <h4>Unit Price:</h4><p>${{ selected_screening.price }}/pp</p>
+    <h4>Total Amount: ${{ total_amount }}</h4>
+    <div class="container">
+        <form method="POST" action="{{ url_for('staff.add_booking', screening_id=selected_screening.screeningID) }}">
+            <input type="hidden" name="selected_seats" value="{{ selected_seats | join(', ') }}">
+            <button type="submit" class="btn btn-dark">confirm booking</button>
+        </form>
+    </div>
+    {% else %}
+    <h4>No selected_seats. Please return to booking page</h4>
+    {% endif %}
+</div>
+
+{% endblock %}

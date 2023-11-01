@@ -31,7 +31,7 @@
                             {% if current_user.role == 'admin' %}
                             <a class="btn btn-danger" href="{{ url_for('admin.cancel_screening_by_id', screening_id=screening.screeningID, movie_id=screening.movieInfo[0]) }}" >Cancel this screening</a>
                             {% elif current_user.role == 'staff' %}
-                            <a class="btn btn-dark" href="{{ url_for('customer.make_booking', screening_id=screening.screeningID) }}" >Book this screening for customer</a>
+                            <a class="btn btn-dark" href="{{ url_for('staff.make_booking_for_customer', screening_id=screening.screeningID) }}" >Book this screening for customer</a>
                             {% else %}
                             <a href="{{ url_for('customer.make_booking', screening_id=screening.screeningID) }}" class="btn btn-dark">Book this screening</a>
                             {% endif %}

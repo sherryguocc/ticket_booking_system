@@ -1,166 +1,83 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
+
 {% block content %}
-
-
 <div class="container">
 
-    <div class="breadcrumb" style="padding: 20px;">
-        {% block breadcrumb %}
-        {{ super() }}  
-        <li class="breadcrumb-item"><a href="{{url_for('planner.home')}}">Dashboard</a></li>
-        <li class="breadcrumb-item"><a href="{{url_for('planner.view_bookings')}}">Bookings</a></li>
-        <li class="breadcrumb-item active" aria-current="page">Edit Booking</li>
-        {% endblock %}
+    <a class="btn btn-secondary" href="{{ url_for('home.home') }}">Back</a>
+    <br>
+    <br>
+
+    <h2 style="text-align: center;">Make a Booking for a customer</h2>
+
+    <div class="container">
+        <h3>Search movies to make a booking for a cutomer</h3>
+        <form method="POST" action="{{ url_for('staff.make_booking') }}" class="form-inline">
+            <div class="row">
+                <div class="col-auto">
+                    <input type="text" name="search_content" class="form-control" placeholder="Search for movies">
+                </div>
+                <div class="col-auto">
+                    <button type="submit" class="btn btn-secondary">Search</button>
+                </div>
+            </div>
+        </form>
     </div>
-    <br>
+    {% if movies %}
+    <!-- Results Container -->
+    <div class="container">
+        <h2>Here are the movies with "{{search_content}}" </h2>
+        <!-- Row for organizing search result cards -->
+        {% for movie in movies %}
+        <div class="col-12 col-md-3">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <!-- Movie Title -->
+                    <h4 class="card-title">{{ movie.title }}</h4>
+                    <!-- Movie Description -->
+                    <p class="card-text">{{ movie.description }}</p>
+                    <!-- Duration -->
+                    <p class="card-text">Duration: {{ movie.durationMins }} minutes</p>
+                    <!-- Language -->
+                    <p class="card-text">Language: {{ movie.language }}</p>
+                    <!-- Release Date -->
+                    <p class="card-text">Release Date: {{ movie.releaseDate }}</p>
+                    <!-- Country -->
+                    <p class="card-text">Country: {{ movie.country }}</p>
+                    <!-- Genre -->
+                    <p class="card-text">Genre: {{ movie.genre }}</p>
 
-    <a href="{{ url_for('planner.view_bookings') }}" class="button">Previous Page</a>
-    <br>
-
-    <br>
-    <div>
-        <h2>Edit Booking {{booking[15]}}</h2>
-    </div>
-         <!-- Message -->
-         {% with messages = get_flashed_messages() %}
-         {% if messages %}
-             <ul class="flash-messages" style="background-color: rgb(222, 74, 74); color: antiquewhite;">
-             {% for message in messages %}
-                 <li class="flash-message" style=" font-size: 16px;">{{ message }}</li>
-             {% endfor %}
-             </ul>
-         {% endif %}
-        {% endwith %}
-
-    <div class="row">
-        <div class="col-md-6">
-            <!-- Left Panel: Edit Booking -->
-            <div id="update-form" class="edit">
-                <h4>Edit Booking Details</h4>
-                <form method="POST" action="{{ url_for('planner.edit_booking', booking_id = booking_id) }}">
-                    <!-- Form fields for editing booking details -->
-                    <!-- Add your form fields here -->
-                    <div class="form-group">
-                        <div class="row">
-                            <div class="col-md-4">
-                                <label for="start_date" class="form-label edit-label"><strong>Start Date:</strong></label>
-                                <input type="date" id="start_date" name="start_date" min="{{ today_date }}" value="{{ booking[8] }}" style="width: 80%;" required>
-                            </div>
-                            <div class="col-md-5">
-                                <label for="start_time" class="form-label edit-label"><strong>Start Time:</strong></label>
-                                <input type="time" id="start_time" name="start_time" value="{{ start_time }}" style="width: 70%;" required>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <div class="row">
-                            <div class="col-md-4">
-                                <label for="end_date" class="form-label edit-label"><strong>End Date:</strong></label>
-                                <input type="date" id="end_date" name="end_date" min="{{ today_date }}" value="{{ booking[10] }}" style="width: 80%;" required>
-                            </div>
-                            <div class="col-md-5">
-                                <label for="end_time" class="form-label edit-label"><strong>End Time:</strong></label>
-                                <input type="time" id="end_time" name="end_time" value="{{ end_time }}" style="width: 70%;" required>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="venue_id" class="form-label edit-label"><strong>Venue:</strong></label>
-                        <select id = "venue_id" name = "venue_id" required>
-                            <option value = "{{booking[1]}}">{{booking[18]}} -- Max {{booking[25]}} people</option>
-                            {% for venue in venue_list %}
-                            <option value = "{{ venue.get_venueID }}">{{ venue.venueName }} -- Max {{venue.get_maxCapacity}} people</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="status" class="form-label edit-label"><strong>Status:</strong></label>
-                        <select id = "status" name = "status" required>
-                            <option value="{{booking[21]}}">{{booking[21]}}</option>
-                            <option value = "Pending">Pending</option>
-                            <option value = "Processing">Processing</option>
-                            <option value = "Waiting for Payment">Waiting for Payment</option>
-                            <option value = "Completed">Completed</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="guest" class="form-label edit-label"><strong>Guest Number:</strong></label>
-                        <input type="number" id="guest" name="guest" value="{{booking[12]}}" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="food_id" class="form-label edit-label"><strong>Food Order:</strong></label>
-                        <select id = "food_id" name = "food_id" required>
-                            <option value="{{booking[4]}}">{{booking[3]}}</option>
-                            {% for menu in menu_list %}
-                            <option value = "{{ menu[0] }}">{{ menu[1] }}</option>
-                            {% endfor %}
-                            <option value="None">None</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="decor_id" class="form-label edit-label"><strong>Decoration Order:</strong></label>
-                        <select id = "decor_id" name = "decor_id" required>
-                            <option value="{{booking[7]}}">{{booking[6]}}</option>
-                            {% for decor in decoration_list %}
-                            <option value = "{{ decor[0] }}">{{ decor[1] }}</option>
-                            {% endfor %}
-                            <option value="None">None</option>
-                        </select>
-                    </div>
-                    <!-- Add more fields here as needed -->
+                    <a class="btn btn-dark" href="{{ url_for('home.screening_list', movie_id=movie.movieID) }}">Select a screening for this movie to book</a>
             </div>
         </div>
-
-        <div class="col-md-6">
-            <!-- Right Panel: Edit Customer -->
-            <div id="update-form" class="edit">
-                <h4>Edit Customer Details</h4>
-                    <!-- Form fields for editing customer details -->
-                    <!-- Add your form fields here -->
-                    <div class="form-group">
-                        <label for="customer_id" class="form-label edit-label"><strong>Customer ID:</strong></label>
-                        <input type="text" class="form-control" id="customer_id" name="customer_id" value="{{booking[14]}}" readonly>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="customer_name" class="form-label edit-label"><strong>Customer Name:</strong></label>
-                        <input type="text" class="form-control" id="customer_name" name="customer_name" value="{{booking[20]}}" readonly>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="email" class="form-label edit-label"><strong>Email:</strong></label>
-                        <input type="email" id="email" name="email" value="{{ booking[23] }}" pattern="[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}" required><br>
-                    </div>
-    
-                    <div class="form-group">
-                        <label for="phone" class="form-label edit-label"><strong>Phone:</strong></label>
-                        <input type="tel" id="phone" name="phone" value="{{ booking[22] }}" pattern="[0-9]*"><br>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="comments" class="form-label edit-label"><strong>Comments:</strong></label>
-                        <textarea class="form-control" id="comments" name="comments" value="{{booking[17]}}"></textarea>
-                    </div>
-                    
+        {% endfor %}
+    {% else %}
+    <div class="row"> 
+    {% for movie in movieList %}
+        <div class="col-12 col-md-4">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <!-- Movie Title -->
+                    <h3 class="card-title">{{ movie.title }}</h3>
+                    <!-- Movie Description -->
+                    <p class="card-text">{{ movie.description }}</p>
+                    <!-- Duration -->
+                    <p class="card-text">Duration: {{ movie.durationMins }} minutes</p>
+                    <!-- Language -->
+                    <p class="card-text">Language: {{ movie.language }}</p>
+                    <!-- Release Date -->
+                    <p class="card-text">Release Date: {{ movie.releaseDate }}</p>
+                    <!-- Country -->
+                    <p class="card-text">Country: {{ movie.country }}</p>
+                    <!-- Genre -->
+                    <p class="card-text">Genre: {{ movie.genre }}</p>
+                    <!-- Button to book screenings -->
+                    <a href="{{ url_for('home.screening_list', movie_id=movie.movieID) }}" class="btn btn-dark">Choose a screening to book</a>
+                </div>
             </div>
         </div>
-
-                    <div class="form-group">
-                        <div class="btn-toolbar justify-content-between">
-                            <input type="submit" value="Save Changes" style="margin-bottom: 15px;">
-                        </div>
-                    </div>
-                </form>
+        {% endfor %}
     </div>
-</div>
-
-
+    {% endif %}
+    </div>
+    {% block additional_content %}{% endblock %}
 {% endblock %}
-
-

@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container">
+    <h2>Enter Debit Card Information</h2>
+    <form method="POST" action="{{ url_for('staff.pay_by_debitcard', booking_id=booking_id) }}">
+        <div class="form-group">
+            <label for="coupon">Coupon:</label>
+            <input type="text" class="form-control" id="coupon" name="coupon" placeholder="Enter your coupon code">
+        </div>
+        <div class="form-group">
+            <label for="cardNumber">Card Number:</label>
+            <input type="text" class="form-control" id="cardNumber" name="cardNumber" placeholder="xxxx-xxxx-xxxx-xxxx" maxlength="12" required>
+        </div>
+        <div class="form-group">
+            <label for="bankName">Bank Name:</label>
+            <select class="form-control" id="bankName" name="bankName" required>
+                <option value="ANZ">ANZ</option>
+                <option value="ASB">ASB</option>
+                <option value="BNZ">BNZ</option>
+                <option value="Westpac">Westpac</option>
+                <option value="Kiwibank">Kiwibank</option>
+                <option value="Other">Other</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="nameOnCard">Name on Card:</label>
+            <input type="text" class="form-control" id="nameOnCard" name="nameOnCard" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+</div>
+{% endblock %}
