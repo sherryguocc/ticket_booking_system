@@ -237,6 +237,7 @@ class BookingSystem:
         expiryDate = datetime.strptime(expiryDate, "%m/%Y")
         if expiryDate is not None and expiryDate < current_date:
             flash("Credit card is expired, please change card.")
+            return False
         else:
             new_creditcard = CreditCard(None, cardNumber, cardType, expiryDate, nameOnCard, securityNumber)
             creditcard_id = CreditCard.add_creditcard(new_creditcard)

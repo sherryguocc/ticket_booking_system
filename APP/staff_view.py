@@ -105,6 +105,8 @@ def pay_by_creditcard(booking_id):
         date=datetime.now()
 
         card_id = BookingSystem.add_creditcard_return_id(card_number,card_type,expiry_date,name_on_card,security_number)
+        if not card_id:
+            return redirect (url_for('staff.pay_by_creditcard',booking_id=booking_id, user_id=user_id))
         payment_id = BookingSystem.add_payment_return_id(booking_id,date,coupon,card_id,None)
         BookingSystem.pay_for_booking(booking_id, payment_id)
         flash("booking paid successfully!")
