@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+
+    <a class="btn btn-secondary" href="{{ url_for('home.home') }}">Back</a>
+    <br>
+    <br>
+
+    <h2 style="text-align: center;">cancel a Movie</h2>
+
+    <div class="container">
+        <h3>Search movies to cancel</h3>
+        <form method="POST" action="{{ url_for('admin.add_screening') }}" class="form-inline">
+            <div class="row">
+                <div class="col-auto">
+                    <input type="text" name="search_content" class="form-control" placeholder="Search for movies">
+                </div>
+                <div class="col-auto">
+                    <button type="submit" class="btn btn-secondary">Search</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    {% if movies %}
+    <!-- Results Container -->
+    <div class="container">
+        <h2>Here are the movies with "{{search_content}}" </h2>
+        <!-- Row for organizing search result cards -->
+        {% for movie in movies %}
+        <div class="col-12 col-md-3">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <!-- Movie Title -->
+                    <h4 class="card-title">{{ movie.title }}</h4>
+                    <!-- Movie Description -->
+                    <p class="card-text">{{ movie.description }}</p>
+                    <!-- Duration -->
+                    <p class="card-text">Duration: {{ movie.durationMins }} minutes</p>
+                    <!-- Language -->
+                    <p class="card-text">Language: {{ movie.language }}</p>
+                    <!-- Release Date -->
+                    <p class="card-text">Release Date: {{ movie.releaseDate }}</p>
+                    <!-- Country -->
+                    <p class="card-text">Country: {{ movie.country }}</p>
+                    <!-- Genre -->
+                    <p class="card-text">Genre: {{ movie.genre }}</p>
+
+                    <a class="btn btn-dark" href="{{ url_for('admin.add_screening_by_id', movie_id=movie.movieID) }}">Add a screening for this movie</a>
+            </div>
+        </div>
+        {% endfor %}
+    {% else %}
+    <div class="row"> 
+    {% for movie in movieList %}
+        <div class="col-12 col-md-4">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <!-- Movie Title -->
+                    <h3 class="card-title">{{ movie.title }}</h3>
+                    <!-- Movie Description -->
+                    <p class="card-text">{{ movie.description }}</p>
+                    <!-- Duration -->
+                    <p class="card-text">Duration: {{ movie.durationMins }} minutes</p>
+                    <!-- Language -->
+                    <p class="card-text">Language: {{ movie.language }}</p>
+                    <!-- Release Date -->
+                    <p class="card-text">Release Date: {{ movie.releaseDate }}</p>
+                    <!-- Country -->
+                    <p class="card-text">Country: {{ movie.country }}</p>
+                    <!-- Genre -->
+                    <p class="card-text">Genre: {{ movie.genre }}</p>
+                    <!-- Button to book screenings -->
+                    <a href="{{ url_for('admin.cancel_movie_by_id', movie_id=movie.movieID) }}" class="btn btn-danger">Cancel this movie</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    </div>
+    {% block additional_content %}{% endblock %}
+{% endblock %}

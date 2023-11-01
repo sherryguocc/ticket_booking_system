@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <a class="btn btn-secondary" href="{{ url_for('home.home') }}">Back to view all movies</a>
+    {% if screeningList %}
+        <h2>Screening for movie: {{ screeningList[0].movieInfo[1] }}</h2>
+    {% else %}
+        <h2>No screenings available for this movie.</h2>
+    {% endif %}
+    
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Start Time</th>
+                <th>End Time</th>
+                <th>Hall</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for screening in screeningList %} 
+                <tr data-date="{{ screening.date }}">
+                    <td>{{ screening.date }}</td>
+                    <td>{{ screening.startTime }}</td>
+                    <td>{{ screening.endTime }}</td>
+                    <td>{{ screening.hallID }}</td>
+                    <td>
+                        {% if current_user.is_authenticated %}
+                            {% if current_user.role == 'admin' %}
+                            <a class="btn btn-danger" href="{{ url_for('admin.cancel_screening_by_id', screening_id=screening.screeningID, movie_id=screening.movieInfo[0]) }}" >Cancel this screening</a>
+                            {% elif current_user.role == 'staff' %}
+                            <a class="btn btn-dark" href="{{ url_for('customer.make_booking', screening_id=screening.screeningID) }}" >Book this screening for customer</a>
+                            {% else %}
+                            <a href="{{ url_for('customer.make_booking', screening_id=screening.screeningID) }}" class="btn btn-dark">Book this screening</a>
+                            {% endif %}
+                        {% else %}
+                            <a href="{{ url_for('home.login') }}" class="btn btn-dark">Book this screening</a>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

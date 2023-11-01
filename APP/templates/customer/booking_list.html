@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container">
+    <h1>Booking List</h1>
+    <a class="btn btn-secondary" href="{{ url_for('home.home') }}">Back to home page</a>
+    <table class="table table-bordered" style="width: auto;">
+        <thead>
+            <tr>
+                <th>Booking Date</th>
+                <th>Movie Name</th>
+                <th>Screening Date</th>
+                <th>Screening Start time</th>
+                <th>Screening End time</th>
+                <th>Hall Name</th>
+                <th>Ticket Price</th>
+                <th>Seat List</th>
+                <th>Number of Seats</th>
+                <th>Original Amount</th>
+                <th>Paid Amount</th>
+                <th>Coupon Used</th>
+                <th>Status</th>
+                <th>Pay Action</th>
+                <th>Cancel Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if bookingList %}
+                {% for booking in bookingList %}
+                <tr>
+                    <td class="custom-column">{{ booking.booking_date}}</td>
+                    <td class="custom-column">{{ booking.movie_name }}</td>
+                    <td class="custom-column">{{ booking.screening_info.date }}</td>
+                    <td class="custom-column">{{ booking.screening_info.start_time }}</td>
+                    <td class="custom-column">{{ booking.screening_info.end_time }}</td>
+                    <td class="custom-column">{{ booking.screening_info.hall_name }}</td>
+                    <td class="custom-column">{{ booking.screening_info.price }}</td>
+                    <td class="custom-column">
+                        <ul>
+                            {% for seat in booking.seat_list %}
+                                <li>{{ seat }}</li>
+                            {% endfor %}
+                        </ul>
+                    </td>
+                    <td class="custom-column">{{ booking.number_of_seats }}</td>
+                    <td class="custom-column">{{ booking.amount }}</td>
+                    <td class="custom-column">{{ booking.payment_info.amount }}</td>
+                    <td class="custom-column">{{ booking.payment_info.coupon }}</td>
+                    <td class="custom-column">{{ booking.status }}</td>
+                    <td class="custom-column">
+                        {% if booking.status == 'pending' %}
+                        <div class="button-container">
+                            <div class="dropdown">
+                                <button class="btn btn-primary" type="button" id="paymentDropdown">
+                                    Pay
+                                </button>
+                                <div class="dropdown-content">
+                                    <a href="{{ url_for('customer.pay', booking_id=booking.booking_id, payment_method='credit_card') }}">Credit Card</a>
+                                    <a href="{{ url_for('customer.pay', booking_id=booking.booking_id, payment_method='debit_card') }}">Debit Card</a>
+                                    <a href="{{ url_for('customer.pay', booking_id=booking.booking_id, payment_method='cash') }}">Cash</a>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+                    </td>
+                    
+                    <td class="custom-column">
+                        {% if booking.status in ['pending', 'paid'] %}
+                        <form method="post" action="{{ url_for('customer.cancel_booking', booking_id=booking.booking_id) }}">
+                            <button type="submit" class="btn btn-danger" style="width: 80px;">Cancel</button>
+                        </form>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            {% else %}
+            <h2>Not any bookings yet.</h2>
+            {% endif %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}

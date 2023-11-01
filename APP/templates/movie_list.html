@@ -1,0 +1,38 @@
+{% if request.path == '/' %}
+<div class="container">
+    <h2>Now Showing:</h2>
+    <div class="row">
+        {% for movie in movieList %}
+        <div class="col-12 col-md-4">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <!-- Movie Title -->
+                    <h3 class="card-title">{{ movie.title }}</h3>
+                    <!-- Movie Description -->
+                    <p class="card-text">{{ movie.description }}</p>
+                    <!-- Duration -->
+                    <p class="card-text">Duration: {{ movie.durationMins }} minutes</p>
+                    <!-- Language -->
+                    <p class="card-text">Language: {{ movie.language }}</p>
+                    <!-- Release Date -->
+                    <p class="card-text">Release Date: {{ movie.releaseDate }}</p>
+                    <!-- Country -->
+                    <p class="card-text">Country: {{ movie.country }}</p>
+                    <!-- Genre -->
+                    <p class="card-text">Genre: {{ movie.genre }}</p>
+                    {% if current_user.role == 'admin' %}
+                    <a class="btn btn-primary" href="{{ url_for('home.screening_list', movie_id=movie.movieID) }}" >View Screenings</a><br>
+                    <a class="btn btn-secondary" href="{{ url_for('admin.add_screening_by_id', movie_id=movie.movieID) }}" >Add screening</a><br>
+                    <a class="btn btn-danger" href="{{ url_for('admin.cancel_movie_by_id', movie_id=movie.movieID) }}" >Cancel this movie</a>
+                    {% elif current_user.role == 'staff' %}
+                    <a class="btn btn-dark" href="{{ url_for('home.screening_list', movie_id=movie.movieID) }}" >View Screenings and Book tickets for customer</a>
+                    {% else %}
+                    <a class="btn btn-dark" href="{{ url_for('home.screening_list', movie_id=movie.movieID) }}" >View Screenings and Buy tickets</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}

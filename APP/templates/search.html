@@ -1,0 +1,58 @@
+{% if request.path == '/' %}  
+    <div class="container">
+        <h3>Discover Movies on show:</h3>
+        <form method="POST" action="{{ url_for('home.home') }}" class="form-inline">
+            <div class="row">
+                <div class="col-auto">
+                    <input type="text" name="search_content" class="form-control" placeholder="Search for movies">
+                </div>
+                <div class="col-auto">
+                    <button type="submit" class="btn btn-secondary">Search</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    {% if movies %}
+        <!-- Results Container -->
+        <div class="container">
+            <h2>Here are the movies with "{{search_content}}" </h2>
+            <a class="btn btn-secondary" href="{{ url_for('home.home') }}">Back to view all movies</a>
+            <!-- Row for organizing search result cards -->
+            <div class="col-12 col-md-4">
+                {% for movie in movies %}
+                <div class="card mb-4">
+                    <div class="card-body">
+                            <!-- Movie Title -->
+                            <h4 class="card-title">{{ movie.title }}</h4>
+                            <!-- Movie Description -->
+                            <p class="card-text">{{ movie.description }}</p>
+                            <!-- Duration -->
+                            <p class="card-text">Duration: {{ movie.durationMins }} minutes</p>
+                            <!-- Language -->
+                            <p class="card-text">Language: {{ movie.language }}</p>
+                            <!-- Release Date -->
+                            <p class="card-text">Release Date: {{ movie.releaseDate }}</p>
+                            <!-- Country -->
+                            <p class="card-text">Country: {{ movie.country }}</p>
+                            <!-- Genre -->
+                            <p class="card-text">Genre: {{ movie.genre }}</p>
+                            {% if current_user.role == 'admin' %}
+                            <a class="btn btn-primary" href="{{ url_for('home.screening_list', movie_id=movie.movieID) }}" >View Screenings</a><br>
+                            <a class="btn btn-secondary" href="{{ url_for('admin.add_screening', movie_id=movie.movieID) }}" >Add screening</a><br>
+                            <a class="btn btn-danger" href="{{ url_for('home.screening_list', movie_id=movie.movieID) }}" >Cancel this movie</a>
+                            {% elif current_user.role == 'staff' %}
+                            <a class="btn btn-dark" href="{{ url_for('home.screening_list', movie_id=movie.movieID) }}" >View Screenings and Book tickets for customer</a>
+                            {% else %}
+                            <a class="btn btn-dark" href="{{ url_for('home.screening_list', movie_id=movie.movieID) }}" >View Screenings and Buy tickets</a>
+                            {% endif %}
+                    </div>
+                    
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    {% endif %}
+
+
+{% endif %}
+

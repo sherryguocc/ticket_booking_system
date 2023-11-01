@@ -1,0 +1,169 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container">
+    <a class="btn btn-secondary" href="{{ url_for('admin.add_movie') }}">Back</a>
+    <form method="POST" action="{{ url_for('admin.add_movie') }}" enctype="multipart/form-data">
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label for="title" class="form-label">Title:</label>
+                <input type="text" name="title" class="form-control" required>
+            </div>
+            <div class="col-md-6">
+                <label for="description" class="form-label">Description:</label>
+                <input type="text" name="description" class="form-control" required>
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label for="duration_mins" class="form-label">Duration (minutes):</label>
+                <select name="duration_mins" class="form-control" required>
+                    {% for mins in range(90, 201, 5) %}
+                        <option value="{{ mins }}">{{ mins }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-6">
+                <label for="language" class="form-label">Language:</label>
+                <div class="input-group">
+                    <select name="language" id="language-select" class="form-control" required>
+                        <option value="English">English</option>
+                        <option value="Spanish">Spanish</option>
+                        <option value="French">French</option>
+                        <option value="Arabic">Arabic</option>
+                        <option value="Russian">Russian</option>
+                        <option value="German">German</option>
+                        <option value="Japanese">Japanese</option>
+                        <option value="Hindi">Hindi</option>
+                        <option value="Italian">Italian</option>
+                        <option value="Korean">Korean</option>
+                        <option value="Mandarin">Mandarin</option>
+                        <option value="Cantonese">Cantonese</option>
+                        <option value="Other">Other</option>
+                    </select>
+                    <input type="text" name="language-input" id="language-input" class="form-control" placeholder="Enter language" style="display: none;">
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-md-4">
+                <label for="release_date" class="form-label">Release Date:</label><br>
+                <label>Day</label>
+                <select name="release_day" class="form-control" required>
+                    {% for day in range(1, 32) %}
+                        <option value="{{ day }}">{{ day }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-4">
+                <br>
+                <label>month</label>
+                <select name="release_month" class="form-control" required>
+                    {% for month in range(1, 13) %}
+                        <option value="{{ month }}">{{ month }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-4">
+                <br>
+                <label>year</label>
+                <select name="release_year" class="form-control" required>
+                    {% for year in range(1930, 2026) %}
+                        <option value="{{ year }}" {% if year == 2023 %}selected{% endif %}>{{ year }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label for="country" class="form-label">Country:</label>
+                <div class="input-group">
+                    <select name="country" id="country-select" class="form-control" required>
+                        <option value="United States">United States</option>
+                        <option value="United Kingdom">United Kingdom</option>
+                        <option value="China">China</option>
+                        <option value="France">France</option>
+                        <option value="Japan">Japan</option>
+                        <option value="Germany">Germany</option>
+                        <option value="Korea">Korea</option>
+                        <option value="Canada">Canada</option>
+                        <option value="Australia">Australia</option>
+                        <option value="India">India</option>
+                        <option value="New Zealand">New Zealand</option>
+                        <option value="Italy">Italy</option>
+                        <option value="Spain">Spain</option>
+                        <option value="Russian">Russian</option>
+                        <option value="Other">Other</option>
+                    </select>
+                    <input type="text" name="country-input" id="country-input" class="form-control" placeholder="Enter country name" style="display: none;">
+                </div>
+            </div>
+            <div class="col-md-6">
+                <label for="genre" class="form-label">Genre:</label>
+                <div class="input-group">
+                    <select name="genre" id="genre-select" class="form-control" required>
+                        <option value="Horror">Crime</option>
+                        <option value="Horror">Horror</option>
+                        <option value="Horror">Animation</option>
+                        <option value="Action">Action</option>
+                        <option value="Comedy">Comedy</option>
+                        <option value="Drama">Drama</option>
+                        <option value="Fantasy">Fantasy</option>
+                        <option value="Mystery">Mystery</option>
+                        <option value="Romance">Romance</option>
+                        <option value="Thriller">Thriller</option>
+                        <option value="Other">Other</option>
+                    </select>
+                    <input type="text" name="genre-input" id="genre-input" class="form-control" placeholder="Enter genre" style="display: none;">
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script>
+    // JavaScript to toggle the visibility of the text input based on the selected option
+    var countrySelect = document.getElementById('country-select');
+    var countryInput = document.getElementById('country-input');
+
+    countrySelect.addEventListener('change', function () {
+        if (countrySelect.value === 'Other') {
+            countryInput.style.display = 'block';
+        } else {
+            countryInput.style.display = 'none';
+        }
+    });
+
+    var genreSelect = document.getElementById('genre-select');
+    var genreInput = document.getElementById('genre-input');
+
+    genreSelect.addEventListener('change', function () {
+        if (genreSelect.value === 'Other') {
+            genreInput.style.display = 'block';
+        } else {
+            genreInput.style.display = 'none';
+        }
+    });
+    
+    var languageSelect = document.getElementById('language-select');
+    var languageInput = document.getElementById('language-input');
+
+    languageSelect.addEventListener('change', function () {
+        if (languageSelect.value === 'Other') {
+            languageInput.style.display = 'block';
+        } else {
+            languageInput.style.display = 'none';
+        }
+    });
+
+
+</script>
+{% endblock %}
