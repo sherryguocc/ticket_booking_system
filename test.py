@@ -409,5 +409,48 @@ class TestPayment:
         self.payment.status = new_status
         assert self.payment.status == new_status
 
+class TestCreditCard:
+    def setup_method(self):
+        self.creditcard = CreditCard(1, "1234 5678 1234 5678", "Visa", "12/25", "John Doe", "123")
+
+    def test_creditcardID_getter(self):
+        assert self.creditcard.creditcardID == 1
+
+    def test_cardNumber_getter(self):
+        assert self.creditcard.cardNumber == "1234 5678 1234 5678"
+
+    def test_cardNumber_setter(self):
+        self.creditcard.cardNumber = "9876 5432 9876 5432"
+        assert self.creditcard.cardNumber == "9876 5432 9876 5432"
+
+    def test_cardType_getter(self):
+        assert self.creditcard.cardType == "Visa"
+
+    def test_cardType_setter(self):
+        self.creditcard.cardType = "MasterCard"
+        assert self.creditcard.cardType == "MasterCard"
+
+    def test_expiryDate_getter(self):
+        assert self.creditcard.expiryDate == "12/25"
+
+    def test_expiryDate_setter(self):
+        new_expiry_date = "05/24"
+        self.creditcard.expiryDate = new_expiry_date
+        assert self.creditcard.expiryDate == new_expiry_date
+
+    def test_nameOnCard_getter(self):
+        assert self.creditcard.nameOnCard == "John Doe"
+
+    def test_nameOnCard_setter(self):
+        self.creditcard.nameOnCard = "Jane Smith"
+        assert self.creditcard.nameOnCard == "Jane Smith"
+
+    def test_securityNumber_getter(self):
+        assert self.creditcard.securityNumber == "123"
+
+    def test_securityNumber_setter(self):
+        self.creditcard.securityNumber = "456"
+        assert self.creditcard.securityNumber == "456"
+
 if __name__ == "__main":
     pytest.main()
