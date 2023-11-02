@@ -118,8 +118,7 @@ class ScreeningSeat:
             return True         
         except Exception as e:
             print("Error while adding screening:", e)
-            return False
-            
+            return False    
     
     @staticmethod
     def get_seats(screening_id):

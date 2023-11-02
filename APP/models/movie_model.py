@@ -1,7 +1,6 @@
 import datetime
 from APP import getCursor
 
-
 class Movie:
     def __init__(self, movieID: int, title: str, description:str, durationMins:int, language: str, releaseDate: datetime, country:str, genre:str, status:str):
         self.__movieID = movieID
@@ -392,4 +391,3 @@ class Screening:
         except Exception as e:
             print(f"Error while deleting movie: {e}")
             return False
-    
