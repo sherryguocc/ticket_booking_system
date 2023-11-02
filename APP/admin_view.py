@@ -63,7 +63,7 @@ def cancel_screening():
     if request.method == 'POST':
         search_content = request.form['search_content']
         movies = BookingSystem.search_movies(search_content)
-        return render_template ('admin/add_screening.html', movies=movies, search_content=search_content)
+        return render_template ('admin/cancel_screening.html', movies=movies, search_content=search_content)
     return render_template('admin/cancel_screening.html',movieList=movieList)
 
 @admin.route('/admin/cancel_screening_by_id/<int:screening_id>/<int:movie_id>')
