@@ -452,5 +452,34 @@ class TestCreditCard:
         self.creditcard.securityNumber = "456"
         assert self.creditcard.securityNumber == "456"
 
+class TestDebitCard:
+    def setup_method(self):
+        self.debitcard = DebitCard(1, "1234 5678 1234 5678", "Bank of Example", "John Doe")
+
+    def test_debitcardID_getter(self):
+        assert self.debitcard.debitcardID == 1
+
+    def test_cardNumber_getter(self):
+        assert self.debitcard.cardNumber == "1234 5678 1234 5678"
+
+    def test_cardNumber_setter(self):
+        self.debitcard.cardNumber = "9876 5432 9876 5432"
+        assert self.debitcard.cardNumber == "9876 5432 9876 5432"
+
+    def test_bankName_getter(self):
+        assert self.debitcard.bankName == "Bank of Example"
+
+    def test_bankName_setter(self):
+        self.debitcard.bankName = "Another Bank"
+        assert self.debitcard.bankName == "Another Bank"
+
+    def test_nameOnCard_getter(self):
+        assert self.debitcard.nameOnCard == "John Doe"
+
+    def test_nameOnCard_setter(self):
+        self.debitcard.nameOnCard = "Jane Smith"
+        assert self.debitcard.nameOnCard == "Jane Smith"
+
+
 if __name__ == "__main":
     pytest.main()
