@@ -354,5 +354,60 @@ class TestCoupon:
         self.coupon.couponCode = new_code
         assert self.coupon.couponCode == new_code
 
+class TestPayment:
+    def setup_method(self):
+        self.payment = Payment(1, 100.0, datetime(2023, 11, 2), 2, 3, 4, "Success")
+
+    def test_paymentID_getter(self):
+        assert self.payment.paymentID == 1
+
+    def test_paymentID_setter(self):
+        self.payment.paymentID = 2
+        assert self.payment.paymentID == 2
+
+    def test_amount_getter(self):
+        assert self.payment.amount == 100.0
+
+    def test_amount_setter(self):
+        self.payment.amount = 200.0
+        assert self.payment.amount == 200.0
+
+    def test_date_getter(self):
+        assert self.payment.date == datetime(2023, 11, 2)
+
+    def test_date_setter(self):
+        new_date = datetime(2023, 11, 3)
+        self.payment.date = new_date
+        assert self.payment.date == new_date
+
+    def test_couponID_getter(self):
+        assert self.payment.couponID == 2
+
+    def test_couponID_setter(self):
+        self.payment.couponID = 3
+        assert self.payment.couponID == 3
+
+    def test_creditCardID_getter(self):
+        assert self.payment.creditCardID == 3
+
+    def test_creditCardID_setter(self):
+        self.payment.creditCardID = 4
+        assert self.payment.creditCardID == 4
+
+    def test_debitCardID_getter(self):
+        assert self.payment.debitCardID == 4
+
+    def test_debitCardID_setter(self):
+        self.payment.debitCardID = 5
+        assert self.payment.debitCardID == 5
+
+    def test_status_getter(self):
+        assert self.payment.status == "Success"
+
+    def test_status_setter(self):
+        new_status = "Failed"
+        self.payment.status = new_status
+        assert self.payment.status == new_status
+
 if __name__ == "__main":
     pytest.main()
