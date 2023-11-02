@@ -1,6 +1,7 @@
 import pytest
 from APP.models.cinema_model import Hall, ScreeningSeat
 from APP.models.movie_model import Movie,Screening
+from APP.models.user_model import User
 from datetime import datetime
 
 class TestHall:
@@ -196,6 +197,62 @@ class TestScreening:
     def test_status_setter(self):
         self.screening.status = "inactive"
         assert self.screening.status == "inactive"
+
+class TestUser:
+    def setup_method(self):
+        self.user = User(1, "testuser", "password123", "user", "John Doe", 1234567890, "123 Main St", "test@example.com")
+
+    def test_userID_getter(self):
+        assert self.user.userID == 1
+
+    def test_username_getter(self):
+        assert self.user.username == "testuser"
+
+    def test_username_setter(self):
+        self.user.username = "newuser"
+        assert self.user.username == "newuser"
+
+    def test_password_getter(self):
+        assert self.user.password == "password123"
+
+    def test_password_setter(self):
+        self.user.password = "newpassword"
+        assert self.user.password == "newpassword"
+
+    def test_role_getter(self):
+        assert self.user.role == "user"
+
+    def test_role_setter(self):
+        self.user.role = "admin"
+        assert self.user.role == "admin"
+
+    def test_name_getter(self):
+        assert self.user.name == "John Doe"
+
+    def test_name_setter(self):
+        self.user.name = "Jane Doe"
+        assert self.user.name == "Jane Doe"
+
+    def test_phone_getter(self):
+        assert self.user.phone == 1234567890
+
+    def test_phone_setter(self):
+        self.user.phone = 9876543210
+        assert self.user.phone == 9876543210
+
+    def test_address_getter(self):
+        assert self.user.address == "123 Main St"
+
+    def test_address_setter(self):
+        self.user.address = "456 Elm St"
+        assert self.user.address == "456 Elm St"
+
+    def test_email_getter(self):
+        assert self.user.email == "test@example.com"
+
+    def test_email_setter(self):
+        self.user.email = "new@example.com"
+        assert self.user.email == "new@example.com"
 
 if __name__ == "__main":
     pytest.main()
