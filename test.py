@@ -132,5 +132,70 @@ class TestMovie:
         self.movie.status = "upcoming"
         assert self.movie.status == "upcoming"
 
+class TestScreening:
+    def setup_method(self):
+        date = datetime(2023, 11, 2)
+        start_time = datetime(2023, 11, 2, 14, 0)
+        end_time = datetime(2023, 11, 2, 16, 0)
+        self.screening = Screening(1, 2, date, start_time, end_time, 1, 10.99, "active")
+
+    def test_screeningID_getter(self):
+        assert self.screening.screeningID == 1
+
+    def test_movieID_getter(self):
+        assert self.screening.movieID == 2
+
+    def test_movieID_setter(self):
+        self.screening.movieID = 3
+        assert self.screening.movieID == 3
+
+    def test_date_getter(self):
+        expected_date = datetime(2023, 11, 2)
+        assert self.screening.date == expected_date
+
+    def test_date_setter(self):
+        new_date = datetime(2023, 11, 3)
+        self.screening.date = new_date
+        assert self.screening.date == new_date
+
+    def test_startTime_getter(self):
+        expected_start_time = datetime(2023, 11, 2, 14, 0)
+        assert self.screening.startTime == expected_start_time
+
+    def test_startTime_setter(self):
+        new_start_time = datetime(2023, 11, 2, 15, 0)
+        self.screening.startTime = new_start_time
+        assert self.screening.startTime == new_start_time
+
+    def test_endTime_getter(self):
+        expected_end_time = datetime(2023, 11, 2, 16, 0)
+        assert self.screening.endTime == expected_end_time
+
+    def test_endTime_setter(self):
+        new_end_time = datetime(2023, 11, 2, 17, 0)
+        self.screening.endTime = new_end_time
+        assert self.screening.endTime == new_end_time
+
+    def test_hallID_getter(self):
+        assert self.screening.hallID == 1
+
+    def test_hallID_setter(self):
+        self.screening.hallID = 2
+        assert self.screening.hallID == 2
+
+    def test_price_getter(self):
+        assert self.screening.price == 10.99
+
+    def test_price_setter(self):
+        self.screening.price = 9.99
+        assert self.screening.price == 9.99
+
+    def test_status_getter(self):
+        assert self.screening.status == "active"
+
+    def test_status_setter(self):
+        self.screening.status = "inactive"
+        assert self.screening.status == "inactive"
+
 if __name__ == "__main":
     pytest.main()
