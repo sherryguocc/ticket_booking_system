@@ -320,5 +320,39 @@ class TestBooking:
         self.booking.status = "canceled"
         assert self.booking.status == "canceled"
 
+class TestCoupon:
+    def setup_method(self):
+        self.coupon = Coupon(1, datetime(2023, 11, 2), 0.1, "COUPON123")
+
+    def test_couponID_getter(self):
+        assert self.coupon.couponID == 1
+
+    def test_couponID_setter(self):
+        self.coupon.couponID = 2
+        assert self.coupon.couponID == 2
+
+    def test_expiryDate_getter(self):
+        assert self.coupon.expiryDate == datetime(2023, 11, 2)
+
+    def test_expiryDate_setter(self):
+        new_date = datetime(2023, 11, 3)
+        self.coupon.expiryDate = new_date
+        assert self.coupon.expiryDate == new_date
+
+    def test_discount_getter(self):
+        assert self.coupon.discount == 0.1
+
+    def test_discount_setter(self):
+        self.coupon.discount = 0.2
+        assert self.coupon.discount == 0.2
+
+    def test_couponCode_getter(self):
+        assert self.coupon.couponCode == "COUPON123"
+
+    def test_couponCode_setter(self):
+        new_code = "NEWCODE"
+        self.coupon.couponCode = new_code
+        assert self.coupon.couponCode == new_code
+
 if __name__ == "__main":
     pytest.main()
