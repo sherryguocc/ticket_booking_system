@@ -232,6 +232,11 @@ class BookingSystem:
         return movie.title
     
     @staticmethod
+    def get_movie_name_by_movie_id(movie_id):
+        movie = Movie.get_movie_by_id(movie_id)
+        return movie.title
+    
+    @staticmethod
     def add_creditcard_return_id(cardNumber, cardType, expiryDate, nameOnCard, securityNumber):
         current_date = datetime.now()
         expiryDate = datetime.strptime(expiryDate, "%m/%Y")

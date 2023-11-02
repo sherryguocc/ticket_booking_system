@@ -19,13 +19,14 @@ def add_screening():
 @admin.route('/admin/add_screening_by_id/<int:movie_id>', methods=['GET', 'POST'])
 @login_required
 def add_screening_by_id(movie_id):
+    movie_name= BookingSystem.get_movie_name_by_movie_id(movie_id)
     if request.method == 'POST':
         screening_date = request.form.get('screening_date')
         startTime = request.form.get('start_time')
         hallID = request.form.get('hall')
         price = float(request.form.get('price'))
         BookingSystem.add_screening(movie_id, screening_date, startTime, hallID, price) 
-    return render_template('admin/add_screening_by_id.html', movie_id=movie_id)
+    return render_template('admin/add_screening_by_id.html', movie_id=movie_id, movie_name=movie_name)
 
 @admin.route('/admin/add_movie', methods=['GET', 'POST'])
 @login_required

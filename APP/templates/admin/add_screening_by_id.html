@@ -1,7 +1,7 @@
 {% extends 'admin/add_screening.html' %}
-
 {% block additional_content %}
 <div class="container">
+    <h2>Add screening for movie: {{ movie_name}}</h2>
     <a class="btn btn-secondary" href="{{ url_for('admin.add_screening') }}">Back</a>
     <form method="POST" action="{{ url_for('admin.add_screening_by_id', movie_id=movie_id) }}" enctype="multipart/form-data">
         <div class="row mb-3">

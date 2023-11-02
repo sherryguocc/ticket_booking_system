@@ -1,10 +1,8 @@
 import datetime
 from APP import getCursor
-import json
-from datetime import timedelta
+
 
 class Movie:
-    """! @brief The Movie class"""
     def __init__(self, movieID: int, title: str, description:str, durationMins:int, language: str, releaseDate: datetime, country:str, genre:str, status:str):
         self.__movieID = movieID
         self.__title = title
