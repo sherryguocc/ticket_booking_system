@@ -18,10 +18,11 @@
             <h2>Here are the movies with "{{search_content}}" </h2>
             <a class="btn btn-secondary" href="{{ url_for('home.home') }}">Back to view all movies</a>
             <!-- Row for organizing search result cards -->
-            <div class="col-12 col-md-4">
+            <div class="row">
                 {% for movie in movies %}
-                <div class="card mb-4">
-                    <div class="card-body">
+                <div class="col-12 col-md-3">
+                    <div class="card mb-4">
+                        <div class="card-body">
                             <!-- Movie Title -->
                             <h4 class="card-title">{{ movie.title }}</h4>
                             <!-- Movie Description -->
@@ -45,6 +46,7 @@
                             {% else %}
                             <a class="btn btn-dark" href="{{ url_for('home.screening_list', movie_id=movie.movieID) }}" >View Screenings and Buy tickets</a>
                             {% endif %}
+                        </div>
                     </div>
                     
                 </div>

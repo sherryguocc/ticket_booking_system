@@ -27,26 +27,28 @@
     <div class="container">
         <h2>Here are the movies with "{{search_content}}" </h2>
         <!-- Row for organizing search result cards -->
-        {% for movie in movies %}
-        <div class="col-12 col-md-3">
-            <div class="card mb-4">
-                <div class="card-body">
-                    <!-- Movie Title -->
-                    <h4 class="card-title">{{ movie.title }}</h4>
-                    <!-- Movie Description -->
-                    <p class="card-text">{{ movie.description }}</p>
-                    <!-- Duration -->
-                    <p class="card-text">Duration: {{ movie.durationMins }} minutes</p>
-                    <!-- Language -->
-                    <p class="card-text">Language: {{ movie.language }}</p>
-                    <!-- Release Date -->
-                    <p class="card-text">Release Date: {{ movie.releaseDate }}</p>
-                    <!-- Country -->
-                    <p class="card-text">Country: {{ movie.country }}</p>
-                    <!-- Genre -->
-                    <p class="card-text">Genre: {{ movie.genre }}</p>
+        <div class="row">
+            {% for movie in movies %}
+            <div class="col-12 col-md-3">
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <!-- Movie Title -->
+                        <h4 class="card-title">{{ movie.title }}</h4>
+                        <!-- Movie Description -->
+                        <p class="card-text">{{ movie.description }}</p>
+                        <!-- Duration -->
+                        <p class="card-text">Duration: {{ movie.durationMins }} minutes</p>
+                        <!-- Language -->
+                        <p class="card-text">Language: {{ movie.language }}</p>
+                        <!-- Release Date -->
+                        <p class="card-text">Release Date: {{ movie.releaseDate }}</p>
+                        <!-- Country -->
+                        <p class="card-text">Country: {{ movie.country }}</p>
+                        <!-- Genre -->
+                        <p class="card-text">Genre: {{ movie.genre }}</p>
 
-                    <a class="btn btn-danger" href="{{ url_for('home.screening_list', movie_id=movie.movieID) }}">Cancel screening for this movie</a>
+                        <a class="btn btn-danger" href="{{ url_for('home.screening_list', movie_id=movie.movieID) }}">Cancel screening for this movie</a>
+                </div>
             </div>
         </div>
         {% endfor %}

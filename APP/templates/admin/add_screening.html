@@ -27,6 +27,7 @@
     <div class="container">
         <h2>Here are the movies with "{{search_content}}" </h2>
         <!-- Row for organizing search result cards -->
+        <div class="row">
         {% for movie in movies %}
         <div class="col-12 col-md-3">
             <div class="card mb-4">
@@ -48,6 +49,7 @@
 
                     <a class="btn btn-dark" href="{{ url_for('admin.add_screening_by_id', movie_id=movie.movieID) }}">Add a screening for this movie</a>
             </div>
+        </div>
         </div>
         {% endfor %}
     {% else %}
