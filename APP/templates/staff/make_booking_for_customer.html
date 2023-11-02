@@ -5,8 +5,12 @@
     <h5>Dear Staff, you will make this booking under your user ID</h5>
     <a class="btn btn-secondary" href="{{ url_for('home.screening_list', movie_id=screening.movieID) }}">Back to screeninglist</a>
     <h4 style="text-align: center;">Selected Screening: {{ movie_name }} {{ screening.date }} {{ screening.startTime }}-{{ screening.endTime }}</h4>
-    <form method="post" action="{{ url_for('staff.confirm_booking', screening_id=screening_id) }}">
-        <p style="text-align: center;">■ Booked Seats&nbsp;&nbsp;&nbsp;&nbsp;● Reserved Seats&nbsp;&nbsp;&nbsp;&nbsp;□ Available Seats</p>
+    <form method="post" action="{{ url_for('customer.confirm_booking', screening_id=screening_id) }}">
+        <p style="text-align: center;">
+            <span style="color: red;">■ Booked Seats</span>
+            <span style="color: orange;">&nbsp;&nbsp;&nbsp;&nbsp;■ Reserved Seats</span>
+            <span >&nbsp;&nbsp;&nbsp;&nbsp;□ Available Seats</span>
+        </p>
         <p style="text-align: center;">ticket price:${{screening.price}}/pp</p>
         <p style="text-align: center;">----------------Screen----------------</p>
         <div style="text-align: center;">
@@ -25,9 +29,9 @@
                                 {% set seat_number = (row + 1) ~ '-' ~ (col + 1) %}
                                 {% set seat_id = 'seat' ~ seat_number %}
                                 {% if seat_id in booked_seats %}
-                                    <div>■</div>
+                                    <div style="color: red;">■</div>
                                 {% elif seat_id in reserved_seats %}
-                                    <div>●</div>
+                                    <div style="color: orange;">■ </div>
                                 {% else %}
                                     <div>
                                         <input type="checkbox" name="selected_seats" value="seat{{ seat_number }}">
