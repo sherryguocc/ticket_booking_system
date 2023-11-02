@@ -1,5 +1,7 @@
 import pytest
 from APP.models.cinema_model import Hall, ScreeningSeat
+from APP.models.movie_model import Movie,Screening
+from datetime import datetime
 
 class TestHall:
     def setup_method(self):
@@ -65,6 +67,70 @@ class TestScreeningSeat:
     def test_status_setter(self):
         self.screening_seat.status = "reserved"
         assert self.screening_seat.status == "reserved"
+
+class TestMovie:
+    def setup_method(self):
+        release_date = datetime(2023, 11, 2) 
+        self.movie = Movie(1, "Movie Title", "Movie Description", 120, "English", release_date, "USA", "Action", "released")
+
+    def test_movieID_getter(self):
+        assert self.movie.movieID == 1
+
+    def test_title_getter(self):
+        assert self.movie.title == "Movie Title"
+
+    def test_title_setter(self):
+        self.movie.title = "New Movie Title"
+        assert self.movie.title == "New Movie Title"
+
+    def test_description_getter(self):
+        assert self.movie.description == "Movie Description"
+
+    def test_description_setter(self):
+        self.movie.description = "New Movie Description"
+        assert self.movie.description == "New Movie Description"
+
+    def test_durationMins_getter(self):
+        assert self.movie.durationMins == 120
+
+    def test_durationMins_setter(self):
+        self.movie.durationMins = 150
+        assert self.movie.durationMins == 150
+
+    def test_language_getter(self):
+        assert self.movie.language == "English"
+
+    def test_language_setter(self):
+        self.movie.language = "Spanish"
+        assert self.movie.language == "Spanish"
+
+    def test_releaseDate_getter(self):
+        assert self.movie.releaseDate == datetime(2023, 11, 2)  
+    def test_releaseDate_setter(self):
+        new_release_date = datetime(2024, 1, 1) 
+        self.movie.releaseDate = new_release_date
+        assert self.movie.releaseDate == new_release_date
+
+    def test_country_getter(self):
+        assert self.movie.country == "USA"
+
+    def test_country_setter(self):
+        self.movie.country = "Canada"
+        assert self.movie.country == "Canada"
+
+    def test_genre_getter(self):
+        assert self.movie.genre == "Action"
+
+    def test_genre_setter(self):
+        self.movie.genre = "Drama"
+        assert self.movie.genre == "Drama"
+
+    def test_status_getter(self):
+        assert self.movie.status == "released"
+
+    def test_status_setter(self):
+        self.movie.status = "upcoming"
+        assert self.movie.status == "upcoming"
 
 if __name__ == "__main":
     pytest.main()
