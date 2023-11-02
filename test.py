@@ -480,6 +480,33 @@ class TestDebitCard:
         self.debitcard.nameOnCard = "Jane Smith"
         assert self.debitcard.nameOnCard == "Jane Smith"
 
+class TestNotification:
+    def setup_method(self):
+        self.notification = Notification(1, "2023-11-02", "Sample content", 100)
+
+    def test_notificationID_getter(self):
+        assert self.notification.notificationID == 1
+
+    def test_date_getter(self):
+        assert self.notification.date == "2023-11-02"
+
+    def test_date_setter(self):
+        self.notification.date = "2023-11-03"
+        assert self.notification.date == "2023-11-03"
+
+    def test_content_getter(self):
+        assert self.notification.content == "Sample content"
+
+    def test_content_setter(self):
+        self.notification.content = "Updated content"
+        assert self.notification.content == "Updated content"
+
+    def test_userID_getter(self):
+        assert self.notification.userID == 100
+
+    def test_userID_setter(self):
+        self.notification.userID = 200
+        assert self.notification.userID == 200
 
 if __name__ == "__main":
     pytest.main()
