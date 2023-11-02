@@ -585,7 +585,7 @@ class Notification():
         self.__userID = userID
     
     @property
-    def debitcardID(self):
+    def notificationID(self):
         return self.__notificationID
 
     @property
