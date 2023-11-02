@@ -2,6 +2,7 @@ import pytest
 from APP.models.cinema_model import Hall, ScreeningSeat
 from APP.models.movie_model import Movie,Screening
 from APP.models.user_model import User
+from APP.models.system_model import Booking, Payment,CreditCard,DebitCard,Coupon,Notification
 from datetime import datetime
 
 class TestHall:
@@ -253,6 +254,71 @@ class TestUser:
     def test_email_setter(self):
         self.user.email = "new@example.com"
         assert self.user.email == "new@example.com"
+
+class TestBooking:
+    def setup_method(self):
+        self.booking = Booking(1, 2, 3, datetime(2023, 11, 2), 4, ["seat1", "seat2"], 100.0, 5, "confirmed")
+
+    def test_bookingID_getter(self):
+        assert self.booking.bookingID == 1
+
+    def test_userID_getter(self):
+        assert self.booking.userID == 2
+
+    def test_userID_setter(self):
+        self.booking.userID = 6
+        assert self.booking.userID == 6
+
+    def test_numberOfSeat_getter(self):
+        assert self.booking.numberOfSeat == 3
+
+    def test_numberOfSeat_setter(self):
+        self.booking.numberOfSeat = 4
+        assert self.booking.numberOfSeat == 4
+
+    def test_bookingDate_getter(self):
+        assert self.booking.bookingDate == datetime(2023, 11, 2)
+
+    def test_bookingDate_setter(self):
+        new_date = datetime(2023, 11, 3)
+        self.booking.bookingDate = new_date
+        assert self.booking.bookingDate == new_date
+
+    def test_screeningID_getter(self):
+        assert self.booking.screeningID == 4
+
+    def test_screeningID_setter(self):
+        self.booking.screeningID = 7
+        assert self.booking.screeningID == 7
+
+    def test_seatList_getter(self):
+        assert self.booking.seatList == ["seat1", "seat2"]
+
+    def test_seatList_setter(self):
+        new_seat_list = ["seat3", "seat4"]
+        self.booking.seatList = new_seat_list
+        assert self.booking.seatList == new_seat_list
+
+    def test_amount_getter(self):
+        assert self.booking.amount == 100.0
+
+    def test_amount_setter(self):
+        self.booking.amount = 150.0
+        assert self.booking.amount == 150.0
+
+    def test_paymentID_getter(self):
+        assert self.booking.paymentID == 5
+
+    def test_paymentID_setter(self):
+        self.booking.paymentID = 8
+        assert self.booking.paymentID == 8
+
+    def test_status_getter(self):
+        assert self.booking.status == "confirmed"
+
+    def test_status_setter(self):
+        self.booking.status = "canceled"
+        assert self.booking.status == "canceled"
 
 if __name__ == "__main":
     pytest.main()
