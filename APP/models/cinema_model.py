@@ -2,7 +2,6 @@ from APP import getCursor
 import json
 
 class Hall:
-    """! @brief The Hall class"""
     def __init__(self, hallID, name, totalSeats, listOfSeat):
         self.__hallID = hallID
         self.__name = name
@@ -58,7 +57,6 @@ class Hall:
         seats_json = seats[0]  # 'seats' is a tuple, so access the JSON string at index 0
         # Parse JSON string to Python list
         seats_list = json.loads(seats_json)
-        print("seats_list:",seats_list)
         return seats_list
 
     
@@ -200,30 +198,4 @@ class ScreeningSeat:
         except Exception as e:
             print(f"Error while deleting movie: {e}")
             return False
-
-class Seat:
-    def __init__(self, seatID, hallID, seatNumber,):
-        self.__seatID = seatID
-        self.__hallID = hallID
-        self.__seatNumber = seatNumber
-    
-    @property
-    def seatID(self):
-        return self.__seatID
-
-    @property
-    def hallID(self):
-        return self.__hallID
-
-    @hallID.setter
-    def hallID(self, value):
-        self.__hallID= value
-
-    @property
-    def seatNumber(self):
-        return self.__seatNumber
-
-    @seatNumber.setter
-    def seatNumber(self, value):
-        self.__hallID= value
 
