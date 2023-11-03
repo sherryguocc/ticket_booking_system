@@ -12,4 +12,5 @@ protobuf==4.21.12
 Werkzeug==2.3.6
 pytest
 pytest-mysql
+pytest-mock
 
