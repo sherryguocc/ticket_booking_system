@@ -1,4 +1,4 @@
-import pytest
+import pytest, json
 from APP.models.cinema_model import Hall, ScreeningSeat
 from APP.models.movie_model import Movie,Screening
 from APP.models.user_model import User
@@ -34,6 +34,27 @@ class TestHall:
         new_list = ["seat2-1", "seat2-2", "seat2-3"]
         self.hall.listOfSeat = new_list
         assert self.hall.listOfSeat == new_list
+
+    def test_get_name_by_id(self, mocker):
+        mocker.patch('APP.models.cinema_model.Hall.get_name_by_id', return_value='Hall One')
+
+        result = Hall.get_name_by_id(1) 
+        assert result == 'Hall One'
+    
+    # def test_get_seatList(self, mocker):
+    #     mock_getCursor = mocker.patch('APP.models.cinema_model.getCursor')
+
+    #     mock_connection = mock_getCursor.return_value
+    #     mock_execute = mock_connection.execute
+    #     mock_fetchone = mock_execute.return_value.fetchone
+
+    #     seats_json = '["seat1-1", "seat1-2", "seat1-3"]'
+    #     mock_fetchone.return_value = (seats_json,)
+
+    #     result = Hall.get_seatList(1)
+
+    #     expected_list = ["seat1-1", "seat1-2", "seat1-3"]
+    #     assert result == expected_list
 
 class TestScreeningSeat:
     def setup_method(self):
@@ -507,6 +528,8 @@ class TestNotification:
     def test_userID_setter(self):
         self.notification.userID = 200
         assert self.notification.userID == 200
+
+
 
 if __name__ == "__main":
     pytest.main()
