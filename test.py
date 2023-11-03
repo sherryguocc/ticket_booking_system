@@ -1,9 +1,11 @@
-import pytest, json
+import pytest
 from APP.models.cinema_model import Hall, ScreeningSeat
 from APP.models.movie_model import Movie,Screening
 from APP.models.user_model import User
 from APP.models.system_model import Booking, Payment,CreditCard,DebitCard,Coupon,Notification
+from APP.general_controller import BookingSystem
 from datetime import datetime
+from pytest_mock import mocker
 
 class TestHall:
     def setup_method(self):
@@ -90,6 +92,8 @@ class TestScreeningSeat:
     def test_status_setter(self):
         self.screening_seat.status = "reserved"
         assert self.screening_seat.status == "reserved"
+    
+
 
 class TestMovie:
     def setup_method(self):
@@ -528,8 +532,6 @@ class TestNotification:
     def test_userID_setter(self):
         self.notification.userID = 200
         assert self.notification.userID == 200
-
-
 
 if __name__ == "__main":
     pytest.main()
