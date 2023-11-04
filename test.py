@@ -523,7 +523,18 @@ class TestNotification:
         self.notification.userID = 200
         assert self.notification.userID == 200
 
+class MockCurrentUser:
+    def is_authenticated(self):
+        return True
 
+    def get_id(self):
+        return 1  # Replace with the user ID you expect
+
+class MockMovie:
+    @staticmethod
+    def get_movie_list():
+        # Define the expected movie list here
+        return ["Movie 1", "Movie 2", "Movie 3"]
 
 if __name__ == "__main":
     pytest.main()
