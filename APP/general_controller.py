@@ -2,11 +2,7 @@ from datetime import date, datetime, timedelta
 from flask import (Flask, Blueprint, render_template, request, redirect, url_for, flash)
 from flask_login import (UserMixin, LoginManager, login_user, login_required, logout_user, current_user)
 import bcrypt
-import random
-import string
 import re
-from config import Config
-import mysql.connector
 from APP.main import app, login_manager
 import re
 import json
