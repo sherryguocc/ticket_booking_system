@@ -37,6 +37,20 @@ class TestHall:
         self.hall.listOfSeat = new_list
         assert self.hall.listOfSeat == new_list
 
+    def test_get_name_by_id(self, mocker):
+        mocker.patch('APP.getCursor')
+        db = Hall(1, 'Hall One', 100, ['seat1-1','seat1-2','seat1-3','seat1-4'])
+        mocker.patch.object(db, 'get_name_by_id', return_value='Hall One')
+        result = db.get_name_by_id(1)
+        assert result == 'Hall One'
+
+    def test_get_seatList(self,mocker):
+        mocker.patch('APP.getCursor')
+        db = Hall(1, 'Hall One', 100, ['seat1-1','seat1-2','seat1-3','seat1-4'])
+        mocker.patch.object(db, 'get_seatList', return_value=['seat1-1','seat1-2','seat1-3','seat1-4'])
+        result = db.get_seatList(1)
+        assert result == ['seat1-1','seat1-2','seat1-3','seat1-4']
+
 class TestScreeningSeat:
     def setup_method(self):
         self.screening_seat = ScreeningSeat(1, 2, "A1", 1, "available")
@@ -72,19 +86,9 @@ class TestScreeningSeat:
         self.screening_seat.status = "reserved"
         assert self.screening_seat.status == "reserved"
 
-    def test_get_name_by_id(self, mocker):
-        mocker.patch('APP.getCursor')
-        db = Hall(1, 'Hall One', 100, ['seat1-1','seat1-2','seat1-3','seat1-4'])
-        mocker.patch.object(db, 'get_name_by_id', return_value='Hall One')
-        result = db.get_name_by_id(1)
-        assert result == 'Hall One'
+    
+    
 
-    def test_get_seatList(self,mocker):
-        mocker.patch('APP.getCursor')
-        db = Hall(1, 'Hall One', 100, ['seat1-1','seat1-2','seat1-3','seat1-4'])
-        mocker.patch.object(db, 'get_seatList', return_value=['seat1-1','seat1-2','seat1-3','seat1-4'])
-        result = db.get_seatList(1)
-        assert result == ['seat1-1','seat1-2','seat1-3','seat1-4']
 class TestMovie:
     def setup_method(self):
         release_date = datetime(2023, 11, 2) 
