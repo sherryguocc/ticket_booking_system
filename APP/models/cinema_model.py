@@ -59,7 +59,6 @@ class Hall:
         seats_list = json.loads(seats_json)
         return seats_list
 
-    
 class ScreeningSeat:
     def __init__(self, screeningSeatID, screeningID, seatNumber, hallID, status):
         self.__screeningSeatID = screeningSeatID
