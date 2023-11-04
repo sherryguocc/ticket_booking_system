@@ -13,4 +13,5 @@ Werkzeug==2.3.6
 pytest
 pytest-mysql
 pytest-mock
+cryptography
 

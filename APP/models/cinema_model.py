@@ -149,9 +149,21 @@ class ScreeningSeat:
     
     @staticmethod
     def book_seat(screening_id, seat_number):
+        print("进入了book seat程序内部")
         connection = getCursor()
+        fetch_query = """SELECT * from screening seat"""
+        connection.execute(fetch_query)
+        result= connection.fetchall()
+        print("book seat内部UPDATE之前的screeningseat",result)
+
         update_query = """UPDATE screeningseat SET status='booked' WHERE screeningID = %s AND seatNumber = %s"""
+        print("调用的query是:",update_query)
         connection.execute(update_query, (screening_id, seat_number))
+
+        fetch_query = """SELECT * from screening seat"""
+        connection.execute(fetch_query)
+        result= connection.fetchall()
+        print("book seat内部query结果",result)
 
     @staticmethod
     def get_max_rows_and_columns(screening_id):

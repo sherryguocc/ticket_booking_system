@@ -1,11 +1,45 @@
 import pytest
+import pymysql
 from APP.models.cinema_model import Hall, ScreeningSeat
 from APP.models.movie_model import Movie,Screening
 from APP.models.user_model import User
 from APP.models.system_model import Booking, Payment,CreditCard,DebitCard,Coupon,Notification
 from APP.general_controller import BookingSystem
 from datetime import datetime
-from pytest_mock import mocker
+from test_db_utils import read_db_config
+
+@pytest.fixture
+def test_db_connection():
+    config = read_db_config("test_db_config.ini")
+    connection = pymysql.connect(**config)
+    yield connection
+    connection.close()
+
+@pytest.fixture
+def setup_test_database(test_db_connection):
+    connection = test_db_connection
+    cursor = connection.cursor()
+    
+    # 添加一条 screening 记录
+    add_screening_query = """INSERT INTO screening (screeningID, movieID, date, startTime, endTime, hallID, price, status) 
+    VALUES (1, 1, '2023-11-03', '12:00:00', '14:00:00', 1, 15.00, 'available')"""
+
+    # 添加一条 screeningseat 记录
+    insert_screeningseat_query = """INSERT INTO screeningseat (screeningID, seatNumber,HallID, status) VALUES (1, 'A1', 1, 'available')"""
+    cursor.execute(insert_screeningseat_query)
+
+    # 返回数据库连接
+    yield test_db_connection
+
+    # # 清理测试数据
+    # cursor.execute("DELETE FROM screeningseat WHERE screeningID = 1 AND seatNumber = 'A1'")
+    # cursor.execute("DELETE FROM screening WHERE screeningID = 1")
+    # connection.commit()
+
+    # # 清理测试数据
+    # cursor.execute("DELETE FROM screeningseat WHERE screeningID = 1 AND seatNumber = 'A1'")
+    # cursor.execute("DELETE FROM screening WHERE screeningID = 1")
+    # connection.commit()
 
 class TestHall:
     def setup_method(self):
@@ -36,27 +70,6 @@ class TestHall:
         new_list = ["seat2-1", "seat2-2", "seat2-3"]
         self.hall.listOfSeat = new_list
         assert self.hall.listOfSeat == new_list
-
-    def test_get_name_by_id(self, mocker):
-        mocker.patch('APP.models.cinema_model.Hall.get_name_by_id', return_value='Hall One')
-
-        result = Hall.get_name_by_id(1) 
-        assert result == 'Hall One'
-    
-    # def test_get_seatList(self, mocker):
-    #     mock_getCursor = mocker.patch('APP.models.cinema_model.getCursor')
-
-    #     mock_connection = mock_getCursor.return_value
-    #     mock_execute = mock_connection.execute
-    #     mock_fetchone = mock_execute.return_value.fetchone
-
-    #     seats_json = '["seat1-1", "seat1-2", "seat1-3"]'
-    #     mock_fetchone.return_value = (seats_json,)
-
-    #     result = Hall.get_seatList(1)
-
-    #     expected_list = ["seat1-1", "seat1-2", "seat1-3"]
-    #     assert result == expected_list
 
 class TestScreeningSeat:
     def setup_method(self):
@@ -93,7 +106,24 @@ class TestScreeningSeat:
         self.screening_seat.status = "reserved"
         assert self.screening_seat.status == "reserved"
     
+    def test_book_seat(self, setup_test_database):
+        screening_id = 1
+        seat_number = 'A1'
+        
+        # 从 setup_test_database fixture 中获取数据库连接对象
+        connection = setup_test_database
 
+        ScreeningSeat.book_seat(screening_id, seat_number)
+        
+        # 创建游标并执行查询
+        cursor = connection.cursor()
+        cursor.execute("SELECT status FROM screeningseat WHERE screeningID = %s AND seatNumber = %s", (screening_id, seat_number))
+        result = cursor.fetchone()
+        print("test_book_seat内部的status query:",result)
+        status = result[0]
+
+        # 验证状态是否为 'booked'
+        assert status == 'booked'
 
 class TestMovie:
     def setup_method(self):
