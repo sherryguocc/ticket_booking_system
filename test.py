@@ -79,6 +79,12 @@ class TestScreeningSeat:
         result = db.get_name_by_id(1)
         assert result == 'Hall One'
 
+    def test_get_seatList(self,mocker):
+        mocker.patch('APP.getCursor')
+        db = Hall(1, 'Hall One', 100, ['seat1-1','seat1-2','seat1-3','seat1-4'])
+        mocker.patch.object(db, 'get_seatList', return_value=['seat1-1','seat1-2','seat1-3','seat1-4'])
+        result = db.get_seatList(1)
+        assert result == ['seat1-1','seat1-2','seat1-3','seat1-4']
 class TestMovie:
     def setup_method(self):
         release_date = datetime(2023, 11, 2) 
