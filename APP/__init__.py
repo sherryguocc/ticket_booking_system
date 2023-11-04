@@ -1,12 +1,6 @@
 from APP import connect
-from flask import Blueprint
-from flask import Flask, render_template, request, redirect, url_for, flash
-from flask_login import UserMixin, LoginManager, login_user, logout_user, current_user
-from datetime import datetime,timedelta
-import bcrypt
-import random
-import string
-import re
+from flask import Flask
+from flask_login import  LoginManager
 from config import Config
 import mysql.connector
 
@@ -33,9 +27,6 @@ def getCursor():
     database=connect.dbname, autocommit=True)
     dbconn = connection.cursor()
     return dbconn
-
-# Blueprint are the 'small portable app' that plug into the main app. So the application is more organized.
-from flask import Blueprint
 
 # Import various modules from APP folder
 from APP.home_view import bp as home_bp
