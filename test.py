@@ -84,10 +84,7 @@ class TestScreeningSeat:
 
     def test_status_setter(self):
         self.screening_seat.status = "reserved"
-        assert self.screening_seat.status == "reserved"
-
-    
-    
+        assert self.screening_seat.status == "reserved"   
 
 class TestMovie:
     def setup_method(self):
